@@ -189,12 +189,26 @@ a{color:inherit}
 .timeline h4{margin-top:64px;font-size:15px;font-weight:700;font-stretch:112%;text-transform:uppercase}
 
 
-/* ---------- stadium band: Corinthians' home rises out of the ground as you scroll ---------- */
-.arena{position:relative;background:var(--white);color:var(--black);height:clamp(320px,62vh,620px);overflow:hidden}
-.arena .word{position:absolute;left:50%;top:40%;transform:translate(calc(-50% + var(--ax,0px)),-50%);white-space:nowrap;font-weight:900;font-stretch:125%;font-size:clamp(130px,30vw,520px);line-height:1;letter-spacing:-.04em;text-transform:uppercase;color:var(--fog);user-select:none}
-.arena .stadium{position:absolute;left:50%;bottom:0;width:min(1100px,92vw);transform:translateX(-50%)}
-.arena .stadium svg{display:block;width:100%;height:auto}
-.arena .cap{position:absolute;left:var(--pad);top:24px;font-family:var(--mono);font-size:12px;color:#777;max-width:34ch}
+/* ---------- 3D stadium: the camera flies around the ground as you scroll ---------- */
+.arena3d{position:relative;height:620vh}
+.arena3d .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.arena3d canvas{display:block;width:100%;height:100%}
+.arena3d .ghost{position:absolute;left:0;top:50%;transform:translate(var(--gx,0),-50%);white-space:nowrap;font-weight:900;font-stretch:125%;font-size:clamp(140px,30vw,520px);line-height:1;letter-spacing:-.04em;color:#0e0e0e;text-transform:uppercase;pointer-events:none;z-index:0}
+.arena3d canvas{position:relative;z-index:1}
+.arena3d .cap{position:absolute;left:var(--pad);bottom:calc(env(safe-area-inset-bottom,0px) + 40px);z-index:3;font-family:var(--mono);font-size:12px;color:var(--ash);max-width:32ch}
+.arena3d .bar{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(env(safe-area-inset-bottom,0px) + 26px);z-index:3;height:2px;background:#222}
+.arena3d .bar i{display:block;height:100%;width:var(--p,0%);background:var(--white)}
+.a3-tag{position:absolute;left:0;top:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .35s}
+.a3-tag .dot{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--white);box-shadow:0 0 0 6px rgba(255,255,255,.15)}
+.a3-tag .stem{position:absolute;left:0;top:0;width:1px;background:rgba(255,255,255,.7);transform-origin:top}
+.a3-tag .card{position:absolute;width:min(300px,70vw);background:rgba(0,0,0,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid #333;border-radius:10px;padding:18px 20px}
+.a3-tag .card b{display:block;font-size:clamp(26px,2.6vw,38px);line-height:.95;font-weight:850;font-stretch:115%;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:10px}
+.a3-tag .card span{display:block;font-size:14.5px;line-height:1.45;color:#cfcfcf}
+.arena3d .fallback{display:none;padding:0 var(--pad)}
+@media (prefers-reduced-motion:reduce){.arena3d{height:auto}.arena3d .stage{position:relative;height:80vh}.a3-tag{display:none}.arena3d .fallback{display:block}}
+.fallback li{list-style:none;padding:18px 0;border-top:1px solid var(--line)}
+.fallback b{display:block;font-size:22px;font-weight:800;font-stretch:112%;text-transform:uppercase}
+.fallback span{color:#bdbdbd}
 
 /* ---------- off the clock ---------- */
 .offclock{padding:clamp(90px,15vh,170px) var(--pad);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(30px,6vw,100px);align-items:start}
@@ -589,44 +603,22 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-f
 
 
 
-  <!-- STADIUM: home of the club I support, rises as you scroll -->
-  <section class="arena" aria-label="The Corinthians stadium in São Paulo">
-    <div class="word" aria-hidden="true">Fiel</div>
-    <p class="cap">Home ground of Corinthians, São Paulo. The club I support.</p>
-    <div class="stadium">
-        <svg viewBox="0 0 1000 300" role="img" aria-label="Silhouette of the Corinthians stadium in São Paulo, with a giant LED wall on its main stand">
-          <defs>
-            <clipPath id="rise"><rect id="riseRect" x="0" y="300" width="1000" height="300"/></clipPath>
-            <clipPath id="ledClip"><rect x="176" y="112" width="648" height="92" rx="3"/></clipPath>
-            <pattern id="px" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#151515"/><circle cx="3" cy="3" r="1.3" fill="#2c2c2c"/></pattern>
-          </defs>
-          <g clip-path="url(#rise)">
-            <!-- end stands (north and south) -->
-            <path d="M20 300 L20 196 Q60 178 104 172 L104 300 Z" fill="#4a4a4a"/>
-            <path d="M980 300 L980 196 Q940 178 896 172 L896 300 Z" fill="#4a4a4a"/>
-            <!-- roof line behind -->
-            <path d="M60 84 L940 84 L962 98 L38 98 Z" fill="#0b0b0b"/>
-            <g stroke="#777" stroke-width="1.4"><line x1="120" y1="84" x2="150" y2="62"/><line x1="880" y1="84" x2="850" y2="62"/><line x1="150" y1="62" x2="850" y2="62"/></g>
-            <!-- main stand with the LED wall -->
-            <path d="M82 300 L82 112 L146 98 L854 98 L918 112 L918 300 Z" fill="#111"/>
-            <rect x="170" y="106" width="660" height="104" rx="5" fill="#000"/>
-            <rect x="176" y="112" width="648" height="92" rx="3" fill="url(#px)"/>
-            <g clip-path="url(#ledClip)">
-              <g id="ledText" fill="#f2f2f2" opacity="0" font-family="Archivo, Helvetica, Arial, sans-serif" font-weight="900" font-size="62" letter-spacing="2">
-                <text x="0" y="180">VAI CORINTHIANS · FIEL · VAI CORINTHIANS · FIEL · VAI CORINTHIANS · FIEL ·</text>
-              </g>
-            </g>
-            <!-- concourse and entrances -->
-            <rect x="82" y="214" width="836" height="10" fill="#2a2a2a"/>
-            <g fill="#3a3a3a">
-              <rect x="120" y="236" width="36" height="64"/><rect x="230" y="236" width="36" height="64"/><rect x="340" y="236" width="36" height="64"/><rect x="450" y="236" width="36" height="64"/>
-              <rect x="514" y="236" width="36" height="64"/><rect x="624" y="236" width="36" height="64"/><rect x="734" y="236" width="36" height="64"/><rect x="844" y="236" width="36" height="64"/>
-            </g>
-          </g>
-          <line x1="0" y1="299" x2="1000" y2="299" stroke="#111" stroke-width="2"/>
-        </svg>
-    </div>
-  </section>
+  <!-- 3D STADIUM -->
+<section class="arena3d" aria-label="A 3D model of the Corinthians stadium with notes about my work">
+  <div class="stage">
+    <div class="ghost" aria-hidden="true">Fiel</div>
+    <canvas aria-hidden="true"></canvas>
+    <p class="cap">Modelled on Corinthians' home ground in São Paulo, the club I support.</p>
+    <div class="bar" aria-hidden="true"><i></i></div>
+  </div>
+  <ul class="fallback">
+    <li><b>Keeping stadium systems running</b><span>IT Support Coordinator at Merivale, Allianz Stadium and the SCG.</span></li>
+    <li><b>450+ POS terminals</b><span>Pre-event checks, software rollouts and on-site fixes.</span></li>
+    <li><b>45,000 fans per event day</b><span>Every minute a till is down is revenue lost.</span></li>
+    <li><b>Network down? Game on.</b><span>When the venue Wi-Fi dropped mid-game, I switched the POS terminals to offline mode at half-time.</span></li>
+    <li><b>Data on the pitch</b><span>FielCup forecasts the World Cup with Dixon-Coles ratings and 50,000 Monte Carlo runs.</span></li>
+  </ul>
+</section>
 
   <!-- OFF THE CLOCK -->
   <section class="offclock" id="offclock" aria-labelledby="off-h">
@@ -707,10 +699,6 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-f
   var skills = document.querySelector('.skills');
   var roll = document.querySelector('.roll');
   var cart = roll.querySelector('.cart');
-  var arena = document.querySelector('.arena');
-  var riseRect = document.getElementById('riseRect');
-  var ledText = document.getElementById('ledText');
-  if(reduce){ riseRect.setAttribute('y','0'); ledText.setAttribute('opacity','1'); ledText.setAttribute('transform','translate(20,0)'); }
 
   function sizeTrack(){
     if(reduce || narrow()){ hs.style.height=''; track.style.transform=''; return; }
@@ -749,16 +737,6 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-f
         roll.style.setProperty('--wx', ((0.5 - rp) * 12) + 'vw');
       }
 
-      // stadium: rises out of the ground, then the LED wall lights up and scrolls
-      var ab = arena.getBoundingClientRect();
-      if(ab.bottom > 0 && ab.top < vh){
-        var ap = clamp((vh - ab.top) / (vh + ab.height), 0, 1);
-        var grow = clamp(ap / 0.5, 0, 1), ge = 1 - Math.pow(1 - grow, 3);
-        riseRect.setAttribute('y', (300 - 300 * ge).toFixed(1));
-        ledText.setAttribute('opacity', clamp((ap - 0.42) / 0.12, 0, 1).toFixed(2));
-        ledText.setAttribute('transform', 'translate(' + (180 - ap * 1500).toFixed(1) + ',0)');
-        arena.style.setProperty('--ax', ((0.5 - ap) * 14) + 'vw');
-      }
 
       // projects: vertical scroll moves the row sideways
       if(!narrow()){
@@ -802,6 +780,216 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-f
   sizeTrack();
   window.addEventListener('resize', sizeTrack);
   window.addEventListener('load', sizeTrack);
+  requestAnimationFrame(frame);
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var section = document.querySelector('.arena3d');
+  var canvas = section.querySelector('canvas');
+  var stage = section.querySelector('.stage');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!window.THREE){ return; }
+
+  // ---------- renderer, scene, camera ----------
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x000000, 260, 620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 1, 2000);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x222222, 0.75));
+  var sun = new THREE.DirectionalLight(0xffffff, 0.75);
+  sun.position.set(-120, 200, 90);
+  scene.add(sun);
+
+  var clay  = new THREE.MeshStandardMaterial({color:0xd9d9d9, roughness:.9, flatShading:true});
+  var clay2 = new THREE.MeshStandardMaterial({color:0xb4b4b4, roughness:.9, flatShading:true});
+  var dark  = new THREE.MeshStandardMaterial({color:0x2a2a2a, roughness:.8});
+  var steel = new THREE.MeshStandardMaterial({color:0x8a8a8a, roughness:.5, metalness:.4});
+  var glass = new THREE.MeshStandardMaterial({color:0x9fb3c2, roughness:.15, metalness:.3, transparent:true, opacity:.55});
+
+  function box(w,h,d,mat,x,y,z){
+    var m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+    m.position.set(x,y,z); scene.add(m); return m;
+  }
+
+  // ground and pitch (105 x 68)
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(1400,1400), new THREE.MeshStandardMaterial({color:0x0c0c0c, roughness:1}));
+  ground.rotation.x = -Math.PI/2; scene.add(ground);
+  var pitch = new THREE.Mesh(new THREE.PlaneGeometry(118,80), new THREE.MeshStandardMaterial({color:0x2f6a3d, roughness:1}));
+  pitch.rotation.x = -Math.PI/2; pitch.position.y = .05; scene.add(pitch);
+  var lineMat = new THREE.MeshBasicMaterial({color:0xffffff});
+  function pline(w,d,x,z){ var m=new THREE.Mesh(new THREE.PlaneGeometry(w,d), lineMat); m.rotation.x=-Math.PI/2; m.position.set(x,.1,z); scene.add(m); }
+  pline(105,.5,0,34); pline(105,.5,0,-34); pline(.5,68,52.5,0); pline(.5,68,-52.5,0); pline(.5,68,0,0);
+  pline(16.5,.5,44.25,20.15); pline(16.5,.5,44.25,-20.15); pline(.5,40.3,36,0);
+  pline(16.5,.5,-44.25,20.15); pline(16.5,.5,-44.25,-20.15); pline(.5,40.3,-36,0);
+  var ring = new THREE.Mesh(new THREE.RingGeometry(9,9.5,64), lineMat); ring.rotation.x=-Math.PI/2; ring.position.y=.1; scene.add(ring);
+
+  // stepped seating: rows rise away from the pitch
+  function stand(len, rows, rowD, rowH, side){
+    // side: 'e' (+z), 'w' (-z), 'n' (+x), 's' (-x)
+    for(var i=0;i<rows;i++){
+      var h = (i+1)*rowH, off = i*rowD + rowD/2;
+      var mat = i%2 ? clay : clay2;
+      if(side==='e') box(len, h, rowD, mat, 0, h/2, 40+off);
+      if(side==='w') box(len, h, rowD, mat, 0, h/2, -40-off);
+      if(side==='n') box(rowD, h, len, mat, 58+off, h/2, 0);
+      if(side==='s') box(rowD, h, len, mat, -58-off, h/2, 0);
+    }
+  }
+  stand(140, 16, 2.6, 2.4, 'e');   // east: the big stand with the LED wall
+  stand(140, 16, 2.6, 2.4, 'w');   // west: glass facade
+  stand(84, 8, 2.6, 2.2, 'n');
+  stand(84, 8, 2.6, 2.2, 's');
+  // corners
+  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(c){ box(22,12,22,clay2, c[0]*70, 6, c[1]*52); });
+
+  // back walls / facades
+  var eastBackZ = 40 + 16*2.6;          // 81.6
+  box(150, 42, 2, dark, 0, 21, eastBackZ+1);
+  box(150, 42, 2, dark, 0, 21, -eastBackZ-1);
+  var westGlass = box(150, 34, .6, glass, 0, 22, -eastBackZ-2.4);
+
+  // LED wall on the east facade, with a moving message
+  var led = document.createElement('canvas'); led.width = 2048; led.height = 160;
+  var lctx = led.getContext('2d');
+  var ledTex = new THREE.CanvasTexture(led);
+  ledTex.wrapS = THREE.RepeatWrapping; ledTex.repeat.set(1,1);
+  function drawLED(){
+    var unit = 'VAI CORINTHIANS  \u00b7  FIEL  \u00b7  ';
+    lctx.fillStyle='#050505'; lctx.fillRect(0,0,led.width,led.height);
+    // size the font so one message is exactly half the texture: it then tiles with no seam
+    lctx.font = '900 100px Archivo, Helvetica, Arial, sans-serif';
+    var size = 100 * (led.width/2) / lctx.measureText(unit).width;
+    lctx.font = '900 ' + size.toFixed(2) + 'px Archivo, Helvetica, Arial, sans-serif';
+    lctx.fillStyle='#f4f4f4'; lctx.textBaseline='middle';
+    lctx.fillText(unit, 0, 84); lctx.fillText(unit, led.width/2, 84);
+    lctx.fillStyle='rgba(0,0,0,.35)';
+    for(var x=0;x<led.width;x+=8) lctx.fillRect(x,0,2,led.height);
+    for(var y=0;y<led.height;y+=8) lctx.fillRect(0,y,led.width,2);
+    ledTex.needsUpdate = true;
+  }
+  drawLED();
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(drawLED); }
+  var ledMesh = new THREE.Mesh(new THREE.PlaneGeometry(140,22), new THREE.MeshBasicMaterial({map:ledTex}));
+  ledMesh.position.set(0, 26, eastBackZ+2.2);
+  scene.add(ledMesh);
+
+  // roofs over east and west stands, on steel trusses
+  function roof(z, dir){
+    var r = box(156, 1.6, 34, steel, 0, 46, z); 
+    for(var x=-70;x<=70;x+=20){ 
+      var col = box(1.2, 46, 1.2, steel, x, 23, z + dir*15);
+      var brace = box(1, 1, 34, steel, x, 44.5, z);
+    }
+    return r;
+  }
+  roof(64, 1); roof(-64, -1);
+  // big screens above the end stands
+  box(2, 12, 30, dark, 82, 24, 0); box(2, 12, 30, dark, -82, 24, 0);
+  var scrMat = new THREE.MeshBasicMaterial({color:0x3a3a3a});
+  var s1 = box(.4, 10, 28, scrMat, 80.7, 24, 0), s2 = box(.4, 10, 28, scrMat, -80.7, 24, 0);
+
+  // ---------- camera path (position, target) driven by scroll ----------
+  var P = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(  40,  14, 250),   // outside, facing the LED wall
+    new THREE.Vector3( 190,  55, 150),   // swing round
+    new THREE.Vector3( 150, 110, -90),   // high three-quarter view
+    new THREE.Vector3(  18,  26, -46),   // inside, west stand, looking across
+    new THREE.Vector3( -45,  20,  10),   // low on the pitch edge
+    new THREE.Vector3(   0, 190,   2),   // straight above
+    new THREE.Vector3(-230, 140, 260)    // pull right out
+  ], false, 'catmullrom', .35);
+  var T = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 24, 60),
+    new THREE.Vector3(0, 12, 20),
+    new THREE.Vector3(0,  0,  0),
+    new THREE.Vector3(0, 18, 50),
+    new THREE.Vector3(10, 40, 60),
+    new THREE.Vector3(0,  0,  0),
+    new THREE.Vector3(0,  0,  0)
+  ], false, 'catmullrom', .35);
+
+  // ---------- notes pinned to places in the stadium ----------
+  var notes = [
+    {a:.02,b:.17, at:[0,30,eastBackZ+2.5], dx:-1, t:'Keeping stadium systems running', s:'IT Support Coordinator at Merivale, at Allianz Stadium and the SCG.'},
+    {a:.19,b:.33, at:[60,8,52],            dx: 1, t:'450+ POS terminals', s:'Pre-event checks, software rollouts and on-site fixes for frozen screens, printers and connectivity.'},
+    {a:.35,b:.50, at:[0,22,-58],           dx:-1, t:'45,000 fans per event day', s:'Every minute a till is down is revenue lost.'},
+    {a:.52,b:.67, at:[30,12,45],           dx:-1, t:'Network down? Game on.', s:'When the venue Wi-Fi dropped mid-game, I switched the POS terminals to offline mode at half-time.'},
+    {a:.69,b:.84, at:[0,1,0],              dx: 1, t:'Data on the pitch', s:'FielCup forecasts the World Cup with Dixon-Coles ratings and 50,000 Monte Carlo runs.'},
+    {a:.87,b:1.01,at:[0,30,eastBackZ+2.5], dx:-1, t:'Fiel, for life', s:'Corinthians is the club I support. In Brazil its fans are called the Fiel, the faithful.'}
+  ];
+  notes.forEach(function(n){
+    var el = document.createElement('div'); el.className='a3-tag';
+    el.innerHTML = '<div class="stem"></div><div class="dot"></div><div class="card"><b></b><span></span></div>';
+    el.querySelector('b').textContent = n.t; el.querySelector('span').textContent = n.s;
+    stage.appendChild(el); n.el = el; n.v = new THREE.Vector3(n.at[0],n.at[1],n.at[2]);
+  });
+
+  // ---------- sizing ----------
+  var W=0,H=0;
+  function resize(){
+    W = stage.clientWidth; H = stage.clientHeight;
+    renderer.setSize(W, H, false);
+    camera.aspect = W/H;
+    camera.fov = W/H < .8 ? 62 : 40;
+    camera.updateProjectionMatrix();
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  function clamp(v,a,b){ return Math.min(b,Math.max(a,v)); }
+  function ease(t){ return t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+  var cur = 0, last = 0, tmp = new THREE.Vector3();
+  function progress(){
+    var r = section.getBoundingClientRect();
+    return clamp(-r.top / (r.height - window.innerHeight), 0, 1);
+  }
+
+  function frame(now){
+    var dt = Math.min(.1, ((now || 0) - last) / 1000); last = now || 0;
+    var target = reduce ? .3 : progress();
+    cur += (target - cur) * (1 - Math.exp(-dt * 7));   // smooth the camera, same feel at any frame rate
+    var p = ease(cur);
+    var mob = W/H < .8 ? 1.35 : 1;          // step back a little on phones
+    var pos = P.getPoint(p), look = T.getPoint(p);
+    camera.position.set(pos.x*mob, pos.y*(mob>1?1.15:1), pos.z*mob);
+    camera.lookAt(look);
+
+    // LED message scrolls with the page
+    ledTex.offset.x = -cur * 4;
+
+    renderer.render(scene, camera);
+
+    // notes
+    notes.forEach(function(n){
+      var on = cur >= n.a && cur <= n.b && !reduce;
+      tmp.copy(n.v).project(camera);
+      var behind = tmp.z > 1;
+      var x = (tmp.x*.5+.5)*W, y = (-tmp.y*.5+.5)*H;
+      var visible = on && !behind && x>-50 && x<W+50 && y>-50 && y<H+50;
+      n.el.style.opacity = visible ? 1 : 0;
+      if(!visible) return;
+      var cw = Math.min(300, W*.7), lift = Math.min(150, H*.2);
+      var cx = n.dx > 0 ? 18 : -cw-18;
+      cx = clamp(x+cx, 12, W-cw-12) - x;     // keep the card on screen
+      var card0 = n.el.querySelector('.card');
+      var cy = -lift;
+      if(y + cy - card0.offsetHeight < 76) cy = 40;   // flip below so the card never hides under the menu
+      n.el.style.transform = 'translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)';
+      var stem = n.el.querySelector('.stem'), card = n.el.querySelector('.card');
+      stem.style.height = Math.abs(cy)+'px';
+      stem.style.transform = cy < 0 ? 'translateY('+cy+'px)' : 'none';
+      card.style.left = cx+'px';
+      card.style.top = (cy < 0 ? cy - card.offsetHeight : cy) + 'px';
+    });
+
+    section.style.setProperty('--gx', (-cur*40)+'vw');
+    section.querySelector('.bar i').style.width = (cur*100).toFixed(1)+'%';
+    requestAnimationFrame(frame);
+  }
   requestAnimationFrame(frame);
 })();
 </script>
